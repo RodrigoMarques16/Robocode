@@ -127,7 +127,7 @@ public class PatternGun {
       index--;
     }while(--BFTime >= 0);
 
-    
+
     robot.setTurnGunRightRadians(Utils.normalRelativeAngle( absoluteBearing - robot.getGunHeadingRadians() ));
   }
   
@@ -138,17 +138,22 @@ public class PatternGun {
       double myEnergy = robot.getEnergy();
       
       if (target.getDistance() < CLOSE_QUARTERS || accuracy > 0.33 ) {
+        // We're probably gonna hit
         bulletPower = STRONG_BULLET_POWER;
       }
-      
       else if (target.getDistance() > LONG_RANGE) {
-        double powerDownPoint = ARUtils.clamp(35, 63 + (int)((target.getEnergy() - myEnergy) * 4), 63);
+        // Save energy for when we're closer
+        // Formula from Diamond, this helps us manage energy when we're weaker than our target
+        double powerDownPoint = ARUtils.clamp(35, 63 + (int) ((target.getEnergy() - myEnergy) * 4), 63);
         if (myEnergy < powerDownPoint) {
           bulletPower = Math.min(bulletPower, ARUtils.cube(myEnergy / powerDownPoint) * DEFAULT_BULLET_POWER);
         }
       }
       
+      // Don't waste energy on a weak target
       bulletPower = Math.min(bulletPower, target.getEnergy() / 4);
+      
+      // Make sure we don't underpower the bullet
       bulletPower = Math.max(Rules.MIN_BULLET_POWER, bulletPower);
 		}
 

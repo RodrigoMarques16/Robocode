@@ -1,5 +1,9 @@
 package AR;
 
+/*
+  Utility class with some math functions
+*/
+
 public class ARUtils {
 
   public static int clamp(int min, int value, int max) {
