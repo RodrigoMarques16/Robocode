@@ -5,8 +5,23 @@ import robocode.*;
 import java.awt.Color;
 
 /*
-  It's a cold ass fashion when she stole my passion
-  It's an everlasting, it's a ghetto blasting
+    Beck - A robot by Rodrigo Marques e Afonso Brandão
+    
+    1v1 bot
+      - Symbollic Pattern Matching gun
+      - Random Movement
+    
+    Based on implementations from Diamond by voidious,
+    and Black Widow by robar.
+    
+    We have emulated Diamond's modular structure for each
+    of the robots components, which worked really well and
+    made it very easy to integrate each other's work into a
+    final robot.
+    
+    For the gun, a Symbollic Pattern Matcher looked very interesting
+    and simple enough for the scope of the project.
+    
 */
 
 
@@ -14,7 +29,8 @@ public class Beck extends AdvancedRobot {
 
 	private static PatternGun gun;
 	private static Radar radar;
-		
+	private static RandomMovement movement;
+  
 //-- run ------------------------------------------------------------------------------------------------------
 
 	public void run() {
@@ -30,6 +46,7 @@ public class Beck extends AdvancedRobot {
 		while(true) {
 			gun.execute();
 			radar.execute();
+      movement.execute();
 			execute();
 		}
 		
@@ -50,13 +67,22 @@ public class Beck extends AdvancedRobot {
 		if (gun == null) {
 			gun = new PatternGun(this);
 		}
-	}
+    if (movement == null) {
+			movement = new RandomMovement(this);
+		}
+    
+    radar.initRound();
+    gun.initRound();
+    movement.initRound();
+	
+  }
 	
 //-- events ---------------------------------------------------------------------------------------------------
 
 	public void onScannedRobot(ScannedRobotEvent e) {
 		gun.onScannedRobot(e);
     radar.onScannedRobot(e);
+    movement.update(e);
 	}
 
   public void onBulletHit(BulletHitEvent e) {
