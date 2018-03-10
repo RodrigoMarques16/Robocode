@@ -41,7 +41,6 @@ public class PatternGun {
 	private static final double DEFAULT_BULLET_POWER = 1.95D;
   private static final double STRONG_BULLET_POWER = 2.95D;
   private static final int CLOSE_QUARTERS = 150;
-  private static final int LONG_RANGE = 325;
 	
   private Beck robot;
 	private ScannedRobotEvent target;
@@ -92,7 +91,7 @@ public class PatternGun {
   
 //-- functions ------------------------------------------------------------------------------------------------
   
-    private void fire(double bulletPower) {
+  private void fire(double bulletPower) {
     System.out.println("Bullet power: " + bulletPower);
     robot.setFire(bulletPower);
     shots++;
@@ -134,20 +133,10 @@ public class PatternGun {
 	private double calculateBulletPower() {
     double bulletPower = DEFAULT_BULLET_POWER;
 		if (target != null) {
-
-      double myEnergy = robot.getEnergy();
       
       if (target.getDistance() < CLOSE_QUARTERS || accuracy > 0.33 ) {
         // We're probably gonna hit
         bulletPower = STRONG_BULLET_POWER;
-      }
-      else if (target.getDistance() > LONG_RANGE) {
-        // Save energy for when we're closer
-        // Formula from Diamond, this helps us manage energy when we're weaker than our target
-        double powerDownPoint = ARUtils.clamp(35, 63 + (int) ((target.getEnergy() - myEnergy) * 4), 63);
-        if (myEnergy < powerDownPoint) {
-          bulletPower = Math.min(bulletPower, ARUtils.cube(myEnergy / powerDownPoint) * DEFAULT_BULLET_POWER);
-        }
       }
       
       // Don't waste energy on a weak target
