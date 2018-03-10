@@ -1,18 +1,19 @@
-package AR;
+package AR.Components;
 
-import robocode.AdvancedRobot;
 import robocode.ScannedRobotEvent;
+
+import AR.Beck;
 
 /*
   Components are the different controllers for each of the tank's part;
-  
-  Proprieties
-  
-      AdvancedRobot robot;
+
+  Objects:
+
+      Beck robot;
         The paren't robot of this component
 
-  
-  Functions
+
+  Functions:
   
       execute()
         Will be called every tick.
@@ -21,24 +22,22 @@ import robocode.ScannedRobotEvent;
         Called at the begining of each round.
 
 
-  Events
+  Events:
     
       onScannedRobot(ScannedRobotEvent e)
         The tank's onScannedRobot event will be replicated to the component
 
-  
-        
 */
 
 
 public abstract class Component {
-  
+
   @SuppressWarnings("unused")
-  private AdvancedRobot robot;
-  
+  private Beck robot;
+
   public abstract void execute();
   public abstract void init();
-  
+
   public abstract void onScannedRobot(ScannedRobotEvent e);
-  
+
 }
