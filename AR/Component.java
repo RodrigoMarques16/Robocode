@@ -6,6 +6,12 @@ import robocode.ScannedRobotEvent;
 /*
   Components are the different controllers for each of the tank's part;
   
+  Proprieties
+  
+      AdvancedRobot robot;
+        The paren't robot of this component
+
+  
   Functions
   
       execute()
@@ -13,12 +19,15 @@ import robocode.ScannedRobotEvent;
         
       init()
         Called at the begining of each round.
-    
+
+
   Events
     
       onScannedRobot(ScannedRobotEvent e)
         The tank's onScannedRobot event will be replicated to the component
 
+  
+        
 */
 
 
