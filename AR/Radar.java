@@ -11,7 +11,7 @@ import robocode.util.Utils;
   
  */
  
-public class Radar {
+public class Radar extends Component{
 	
   private static final double MAX_RADAR_TURN = Math.PI / 4;
   
@@ -45,7 +45,7 @@ public class Radar {
     robot.setTurnRadarRightRadians(radarTurn);
   }
   
-  public void initRound() {
+  public void init() {
     this.target = null;
     //this.direction = 1;
   }

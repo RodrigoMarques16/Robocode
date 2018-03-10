@@ -35,7 +35,7 @@ import AR.ARUtils;
   
  */
  
-public class PatternGun {
+public class PatternGun extends Component{
 	
   private static final int MATCH_LENGTH = 30;
 	private static final double DEFAULT_BULLET_POWER = 1.95D;
@@ -70,7 +70,7 @@ public class PatternGun {
     }
   }
   
-  public void initRound(){
+  public void init(){
     this.target = null;
   }
 

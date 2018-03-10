@@ -71,9 +71,9 @@ public class Beck extends AdvancedRobot {
 			movement = new RandomMovement(this);
 		}
     
-    radar.initRound();
-    gun.initRound();
-    movement.initRound();
+    radar.init();
+    gun.init();
+    movement.init();
 	
   }
 	
@@ -82,7 +82,7 @@ public class Beck extends AdvancedRobot {
 	public void onScannedRobot(ScannedRobotEvent e) {
 		gun.onScannedRobot(e);
     radar.onScannedRobot(e);
-    movement.update(e);
+    movement.onScannedRobot(e);
 	}
 
   public void onBulletHit(BulletHitEvent e) {

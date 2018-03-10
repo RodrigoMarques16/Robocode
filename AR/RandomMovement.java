@@ -4,7 +4,7 @@ import robocode.*;
 import robocode.util.Utils;
 import java.awt.geom.*;
 
-public class RandomMovement {
+public class RandomMovement extends Component {
   static final double MAX_VELOCITY = 8;
   static final double WALL_MARGIN = 25;
 	
@@ -21,14 +21,14 @@ public class RandomMovement {
 		this.bot = bot;
 	}
 	
-  public void initRound() {
+  public void init() {
 		enemyLocation = null;
 		//Vamos projetar um rectangulo que representa o campo do robocode. Vamos dar uma margem de 25 pxx para evitar as paredes
 		//precisamos disto para escolher os pontos para os quais no mover
 		field = new  RoundRectangle2D.Double(25, 25, bot.getBattleFieldWidth() - 50, bot.getBattleFieldHeight() - 50, 75, 75);
-	}
+	} 
 
-  public void update(ScannedRobotEvent e) {
+  public void onScannedRobot(ScannedRobotEvent e) {
     robotLocation = new Point2D.Double(bot.getX(), bot.getY());
       
     enemyAbsoluteBearing = bot.getHeadingRadians() + e.getBearingRadians();
@@ -73,7 +73,7 @@ public class RandomMovement {
   void considerChangingDirection() {
 		//Atiramos um dados para alisar o movimento. Podemos alterar este valor como quisermos. Quanto mais
 		//liso, mais nos conseguimos mexer, mas mais previsível o movimento se torna
-		double chanceToFlatten = 0.05;
+		double chanceToFlatten = 0.025;
 		if (Math.random() < chanceToFlatten) {
 		    movementLateralAngle *= -1;
 		}
