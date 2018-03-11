@@ -9,11 +9,11 @@ public class ARUtils {
   /**
    * Function that clamps a value between a lower and upper bounds 
    *
-   * @param min Lower bound
+   * @param lower Lower bound
    * @param value Value to compare
-   * @param max Uppwer bound
+   * @param upper Upper bound
    *
-   * @return lower if
+   * @return Lower if value < lower,   Upper if value > upper,  value if lower <= value <= upper
    */
   public static int clamp(int lower, int value, int upper) {
       return Math.max(lower, Math.min(value, upper));
@@ -22,11 +22,11 @@ public class ARUtils {
   /**
    * Function that clamps a value between a lower and upper bounds 
    *
-   * @param min Lower bound
+   * @param lower Lower bound
    * @param value Value to compare
-   * @param max Uppwer bound
+   * @param upper Upper bound
    *
-   * @return lower if
+   * @return Lower if value < lower,   Upper if value > upper,  value if lower <= value <= upper
    */
   public static double clamp(double lower, double value, double upper) {
       return Math.max(lower, Math.min(value, upper));

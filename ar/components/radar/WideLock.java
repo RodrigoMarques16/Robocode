@@ -7,7 +7,7 @@ import robocode.util.Utils;
 import ar.components.Component;
 
 /**
- * Simple Wide Lock radar
+ * Simple Wide Lock implementation for our robot
  * Turn the radar PI/4 radians while we don't have a target
  * Only turn it PI/8 radians if we have a lock
  */
@@ -18,7 +18,11 @@ public class WideLock extends Component{
   private AdvancedRobot robot;
   private long lastScanTime;
   ScannedRobotEvent target;
-
+  
+  /**
+   * Constructor
+   * @param robot Parent robot of this Component
+   */
   public WideLock(AdvancedRobot robot) {
       this.robot = robot;
   }

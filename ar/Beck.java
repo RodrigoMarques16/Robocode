@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import robocode.*;
 
@@ -31,10 +32,10 @@ import ar.components.radar.WideLock;
  *
  *  For the gun, a Symbollic Pattern Matcher looked very interesting
  *  and simple enough for the scope of the project.
- */
+*/
 
- /**
- * Beck - Symbollic Pattern Matching and RandomMovement
+/**
+ * Beck - Symbollic Patern Matching and RandomMovement
  * @author Afonso Brandão e Rodrigo Marques
  * @version 2.0 09/03/2018  
  */
@@ -63,9 +64,10 @@ public class Beck extends AdvancedRobot {
     setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
 
     while(true) {
-      gun.execute();
-      radar.execute();
-      movement.execute();
+      for (Component cmp : _components) {
+        cmp.execute();
+      }
+      executeComponents();
       execute();
     }
 
@@ -87,7 +89,11 @@ public class Beck extends AdvancedRobot {
    * and initialize them
    */
   private void initComponents(){
-    if (radar == null) {
+    if (movement == null) {
+      movement = new RandomMovement(this);
+      _components.add(movement);
+    }
+    if (radar == null) { 
       radar = new WideLock(this);
       _components.add(radar);
     }
@@ -95,19 +101,40 @@ public class Beck extends AdvancedRobot {
       gun = new PatternGun(this);
       _components.add(gun);
     }
-    if (movement == null) {
-      movement = new RandomMovement(this);
-      _components.add(movement);
-    }
     
     for (Component cmp : _components) {
-      System.out.println(cmp.getClass().getName() + " loaded");
-      cmp.init();
+      invokeMethod(cmp, "init");
     }
-
   }
   
-//-- Events ---------------------------------------------------------------------------------------------------
+  /**
+   * Call execute() on every loaded component
+   */
+  private void executeComponents() {
+    for (Component cmp : _components) {
+      invokeMethod(cmp, "execute");
+    }
+  }
+  
+  /**
+   * Invoke a method on a component
+   * @param cmp Component to invoke on
+   * @param name Name of the method to invoke
+   */
+  private void invokeMethod(Component cmp, String name){
+    try {
+      Method m = cmp.getClass().getMethod(name);
+      m.invoke(cmp);
+    } catch (NoSuchMethodException ex) {
+      System.out.println("A component needs to implement " + name + "()");
+    } catch (IllegalAccessException ex) {
+      System.out.println("Make sure" + name + "() is public");
+    } catch (InvocationTargetException ex) {
+      System.out.println(ex.getCause());
+    }
+  }
+  
+//-- Event Handling -------------------------------------------------------------------------------------------
 
   /**
    * Replicate events to components
@@ -116,7 +143,7 @@ public class Beck extends AdvancedRobot {
    * @param e Event to pass on
    */
   private void replicate(String name, Event e) {
-    // should have used lookup tables instead of try/catch
+    // should have used lookup tables instead, since not every component implements every event
     for (Component cmp : _components) {
       try {
         Method m = cmp.getClass().getMethod(name, e.getClass());
