@@ -43,10 +43,14 @@ public class RandomMovement extends Component {
     //Vamos projetar um rectangulo que representa o campo do robocode.
     // Vamos dar uma margem de 25 pxx para evitar as paredes
     //precisamos disto para escolher os pontos para os quais no mover
-    field = new RoundRectangle2D.Double( WALL_MARGIN, WALL_MARGIN, 
-                                  bot.getBattleFieldWidth() - 2*WALL_MARGIN, 
-                                  bot.getBattleFieldHeight() - 2*WALL_MARGIN,
-                                  100 - WALL_MARGIN, 100 - WALL_MARGIN);
+    field = new RoundRectangle2D.Double( 
+      WALL_MARGIN, 
+      WALL_MARGIN, 
+      bot.getBattleFieldWidth() - 2 * WALL_MARGIN, 
+      bot.getBattleFieldHeight() - 2 * WALL_MARGIN,
+      100 - WALL_MARGIN, 100 - WALL_MARGIN
+    );
+    
     movementLateralAngle = 0.2;
   }
 
@@ -88,15 +92,16 @@ public class RandomMovement extends Component {
     do {
       
       double movementAngle  = absoluteBearing(enemyLocation, robotLocation) 
-                             + movementLateralAngle;
+                              + movementLateralAngle;
 
       double movementLength = enemyDistance * (1.1 - tries / 100.0);
       double xDisplacement  = Math.sin(movementAngle) * movementLength;
       double yDisplacement  = Math.cos(movementAngle) * movementLength;
 
-      robotDestination = new 
-                Point2D.Double(enemyLocation.getX() + xDisplacement, 
-                               enemyLocation.getY() + yDisplacement);
+      robotDestination = new Point2D.Double(
+        enemyLocation.getX() + xDisplacement, 
+        enemyLocation.getY() + yDisplacement
+      );
 
       tries++;
 
@@ -121,9 +126,9 @@ public class RandomMovement extends Component {
    * @param a posição de destino
    */
   private void goTo(Point2D destination) {
-    double angle = Utils.normalRelativeAngle(
-                  absoluteBearing(robotLocation, destination)
-                  - bot.getHeadingRadians());
+    double absBearing = absoluteBearing(robotLocation, destination);
+    double myHeading = bot.getHeadingRadians();
+    double angle = Utils.normalRelativeAngle(absBearing - myHeading);
 
     double turnAngle = Math.atan(Math.tan(angle));
 
