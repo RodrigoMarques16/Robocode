@@ -8,6 +8,10 @@ import robocode.util.Utils;
 
 import ar.components.Component;
 
+/**
+ * RandomMovement
+ * @author Afonso Brandão
+ */
 public class RandomMovement extends Component {
   static final double MAX_VELOCITY = 8;
   static final double WALL_MARGIN  = 25;
