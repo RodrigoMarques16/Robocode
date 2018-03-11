@@ -1,16 +1,14 @@
 package AR.Components.Movement;
 
-import java.awt.geom.*;
-
-import robocode.*;
-import robocode.util.Utils;
-
+import java.awt.geom.*;     //Point2D.Double e RoundRectangle2D.Double
+import robocode.*;          //API do robocode
+import robocode.util.Utils; //normalRelativeAngle
 import AR.Beck;
 import AR.Components.Component;
 
 public class RandomMovement extends Component {
   static final double MAX_VELOCITY = 8;
-  static final double WALL_MARGIN = 25;
+  static final double WALL_MARGIN  = 25;
 
   RoundRectangle2D.Double field;
 
@@ -20,39 +18,44 @@ public class RandomMovement extends Component {
   double enemyDistance;
   double enemyAbsoluteBearing;
   double movementLateralAngle = 0.2;
-
+  /**
+  * Construtor da Class
+  * @param A class principal do robot
+  */
   public RandomMovement(Beck bot) {
     this.bot = bot;
   }
-
+  /**
+  * Método para para initializar a localização do enimigo e o rectangulo para o cálculo de pontos-destino
+  */
   public void init() {
     enemyLocation = null;
     //Vamos projetar um rectangulo que representa o campo do robocode. Vamos dar uma margem de 25 pxx para evitar as paredes
     //precisamos disto para escolher os pontos para os quais no mover
     field = new  RoundRectangle2D.Double(25, 25, bot.getBattleFieldWidth() - 50, bot.getBattleFieldHeight() - 50, 75, 75);
   }
-
+  /**
+  *  Comportamento do moviemento quando o robot recebe o evento scannedrobot. Atualiza a posição do inimigo
+  *  @param o evento scannedRobot
+  */
   public void onScannedRobot(ScannedRobotEvent e) {
-    robotLocation = new Point2D.Double(bot.getX(), bot.getY());
 
+    robotLocation = new Point2D.Double(bot.getX(), bot.getY());
+ 
     enemyAbsoluteBearing = bot.getHeadingRadians() + e.getBearingRadians();
     enemyDistance = e.getDistance();
-    enemyLocation = vectorToLocation(enemyAbsoluteBearing, enemyDistance, robotLocation);
 
-    /*
-    double enemyMovementAngle = enemyAbsoluteBearing + movementLateralAngle;
-    double xDisplacement = Math.sin(movementAngle) * movementLength;
-    double yDisplacement = Math.cos(movementAngle) * movementLength;
-
-    enemyLocation = new Point2D.Double(enemyLocation.getX() + xDisplacement, enemyLocation.getY() + yDisplacement);
-    */
+    double xDisplacement = Math.sin(enemyAbsoluteBearing) * enemyDistance;
+    double yDisplacement = Math.cos(enemyAbsoluteBearing) * enemyDistance;
+    enemyLocation = new Point2D.Double(bot.getX() + xDisplacement, bot.getY() + yDisplacement);
+  
+    
   }
-
+  /**
+  * Aqui implementamos o behavior do moviemento a cada tick(). Esta função vai ser chamada no run
+  */
   public void execute() {
-    //Esta código executa a todos os ticks
     if (enemyLocation == null) {
-      //Ainda não houve um scanned event
-      //bot.setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
       return;
     }
     considerChangingDirection();
@@ -60,7 +63,7 @@ public class RandomMovement extends Component {
     double tries = 0;
 
     do {
-      double movementAngle = absoluteBearing(enemyLocation, robotLocation) + movementLateralAngle;
+      double movementAngle = absoluteBearing(enemyLocation, robotLocation);
       double movementLength = enemyDistance * (1.1 - tries / 100.0);
       double xDisplacement = Math.sin(movementAngle) * movementLength;
       double yDisplacement = Math.cos(movementAngle) * movementLength;
@@ -73,18 +76,20 @@ public class RandomMovement extends Component {
     goTo(robotDestination);
     //bot.setTurnRadarRightRadians(Utils.normalRelativeAngle(enemyAbsoluteBearing - bot.getRadarHeadingRadians()) * 2);
   }
-
-  void considerChangingDirection() {
-    //Atiramos um dados para alisar o movimento. Podemos alterar este valor como quisermos. Quanto mais
-    //liso, mais nos conseguimos mexer, mas mais previsível o movimento se torna
+  /**
+  * Método para introduzir aleatoridade no movimento através de uma chance de inverter a direção
+  */
+  private void considerChangingDirection() {
     double chanceToFlatten = 0.025;
     if (Math.random() < chanceToFlatten) {
       movementLateralAngle *= -1;
     }
   }
-
-    //Método para dirigir o robot a determinadas coordenadas
-  void goTo(Point2D destination) {
+  /**
+  * Método para dirigir o robot a determinadas coordenadas
+  * @param a posição de destino
+  */
+  private void goTo(Point2D destination) {
     double angle = Utils.normalRelativeAngle(absoluteBearing(robotLocation, destination) - bot.getHeadingRadians());
     double turnAngle = Math.atan(Math.tan(angle));
     bot.setTurnRightRadians(turnAngle); //Transformar o angulo num valor entre -pi/2 e +pi/2
@@ -92,20 +97,13 @@ public class RandomMovement extends Component {
 
     //Se tivermos de virar muito, limitamos a velocidade a zero
     bot.setMaxVelocity(Math.abs(bot.getTurnRemaining()) > 33 ? 0 : 25);
-    }
-
-    static Point2D vectorToLocation(double angle, double length, Point2D sourceLocation) {
-      return vectorToLocation(angle, length, sourceLocation, new Point2D.Double());
-    }
-
-    static Point2D vectorToLocation(double angle, double length, Point2D sourceLocation, Point2D targetLocation) {
-      targetLocation.setLocation(sourceLocation.getX() + Math.sin(angle) * length,
-      sourceLocation.getY() + Math.cos(angle) * length);
-      return targetLocation;
-    }
-
-    //função utilitária para nos dar o angulo absoluto entre dois pontos
-    static double absoluteBearing(Point2D source, Point2D target) {
+  }
+  /**
+  * Ângulo absoluto entre dois pontos
+  * @param os dois pontos
+  * @return o ângulo entre eles
+  */
+  static double absoluteBearing(Point2D source, Point2D target) {
       return Math.atan2(target.getX() - source.getX(), target.getY() - source.getY());
-    }
+  }
 }
