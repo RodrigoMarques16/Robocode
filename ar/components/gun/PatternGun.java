@@ -41,18 +41,19 @@ import ar.ARUtils;
  */
 public class PatternGun extends Component{
 
-  private static final int MATCH_LENGTH = 30;
+  private static final int            MATCH_LENGTH = 30;
   private static final double DEFAULT_BULLET_POWER = 1.95D;
-  private static final double STRONG_BULLET_POWER = 2.95D;
-  private static final double WEAK_BULLET_POWER = 1.00D;
-  private static final int CLOSE_QUARTERS = 150;
-  private static final int LONG_RANGE = 325;
+  private static final double  STRONG_BULLET_POWER = 2.95D;
+  private static final double    WEAK_BULLET_POWER = 1.00D;
+  private static final int          CLOSE_QUARTERS = 150;
+  private static final int              LONG_RANGE = 325;
+  private static final int     ACCURACY_THRESHHOLD = 325;
 
   private AdvancedRobot robot;
   private ScannedRobotEvent target;
   private StringBuffer history; 
 
-  private int	shots;
+  private int shots;
   private int hits;
   private double accuracy;
 
@@ -62,13 +63,15 @@ public class PatternGun extends Component{
    */
   public PatternGun(AdvancedRobot robot) {
     this.robot = robot;
-    this.history = new StringBuffer("000000000000000000000000000000000000000000000000000000000000");
+    this.history = new StringBuffer("000000000000000000000000000000000000000000
+    000000000000000000");
+
     this.shots = 0;
     this.hits = 0;
     this.accuracy = 0;
   }
 
-//-- Core ------------------------------------------------------------------------------------------------------
+//-- Core ---------------------------------------------------------------------
 
   /**
    * Called by parent Robot every tick
@@ -77,7 +80,9 @@ public class PatternGun extends Component{
   public void execute() {
     if (target != null) {
       double bulletPower = calculateBulletPower();
-      if (robot.getGunHeat() == 0 && robot.getGunTurnRemaining() == 0 && robot.getEnergy() > bulletPower) {
+      if (robot.getGunHeat() == 0 && 
+      robot.getGunTurnRemaining() == 0 && robot.getEnergy() > bulletPower) {
+
         fire(bulletPower);
       }
       aim(bulletPower);
@@ -92,7 +97,7 @@ public class PatternGun extends Component{
     this.target = null;
   }
 
-//-- Private Methods ------------------------------------------------------------------------------------------
+//-- Private Methods ----------------------------------------------------------
 
   /**
    * Custom firing function with logging
@@ -118,7 +123,9 @@ public class PatternGun extends Component{
     
     double bVelocity = ARUtils.bulletVelocity(bulletPower);
     int BFTime = ARUtils.bulletFlightTime(dist, bVelocity);
-    double absoluteBearing = target.getBearingRadians() + robot.getHeadingRadians();
+
+    double absoluteBearing = 
+    target.getBearingRadians() + robot.getHeadingRadians();
 
     // Reduce match length until we can get a match, or none is found
     // Start at BFTime so we don't later try to iterate to negative indexes
@@ -127,14 +134,18 @@ public class PatternGun extends Component{
         matchLength--;
     }while(index < 0);
 
-    // Convert the information back to numbers and calculate the angular velocity
-    // Adding the velocities to the current bearing will help us predict the next angle of the enemy
+    // Convert the information back to numbers
+    // and calculate the angular velocity
+    // Adding the velocities to the current bearing will help us predict the
+    // next angle of the enemy
     do {
       absoluteBearing += Math.asin( (byte) history.charAt(index) / dist);
       index--;
     }while(--BFTime >= 0);
     
-    robot.setTurnGunRightRadians(Utils.normalRelativeAngle( absoluteBearing - robot.getGunHeadingRadians() ));
+    robot.setTurnGunRightRadians(
+    Utils.normalRelativeAngle( 
+    absoluteBearing - robot.getGunHeadingRadians() ));
   }
   
   /**
@@ -147,7 +158,7 @@ public class PatternGun extends Component{
     double bulletPower = DEFAULT_BULLET_POWER;
     if (target != null) {
 
-      if (target.getDistance() < CLOSE_QUARTERS || accuracy > 0.33 ) {
+      if (target.getDistance() < CLOSE_QUARTERS || accuracy > ACCURACY_THRESHHOLD ) {
         // We're probably gonna hit
         bulletPower = STRONG_BULLET_POWER;
       }
@@ -173,7 +184,7 @@ public class PatternGun extends Component{
     this.target = target;
   }
 
-//-- Event Handling -------------------------------------------------------------------------------------------
+//-- Event Handling -----------------------------------------------------------
 
   /**
    * Targets the scanned robot and stores its information
@@ -183,8 +194,11 @@ public class PatternGun extends Component{
   public void onScannedRobot(ScannedRobotEvent e) {
     setTarget(e);
 
-    double absoluteBearing = target.getBearingRadians() + robot.getHeadingRadians();
-    double lateralVelocity = Math.sin(target.getHeadingRadians() - absoluteBearing) * target.getVelocity();
+    double absoluteBearing = 
+    target.getBearingRadians() + robot.getHeadingRadians();
+
+    double lateralVelocity = Math.sin(target.getHeadingRadians() - 
+    absoluteBearing) * target.getVelocity();
 
     history.insert(0, (char) Math.round(lateralVelocity));
   }
