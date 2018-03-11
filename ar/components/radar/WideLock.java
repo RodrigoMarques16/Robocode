@@ -7,7 +7,7 @@ import robocode.util.Utils;
 import ar.components.Component;
 
 /**
- * Simple Wide Lock implementation for our robot
+ * Simple Wide Lock radar
  * Turn the radar PI/4 radians while we don't have a target
  * Only turn it PI/8 radians if we have a lock
  */
