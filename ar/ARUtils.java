@@ -7,26 +7,26 @@ package ar;
 public class ARUtils {
 
   /**
-   * Function that clamps a value between a lower and upper bounds 
+   * Function that clamps an INTEGER value between a lower and upper bounds 
    *
-   * @param lower Lower bound
-   * @param value Value to compare
-   * @param upper Upper bound
+   * @param lower - Lower bound
+   * @param value - Value to compare
+   * @param upper - Upper bound
    *
-   * @return Lower if value < lower,   Upper if value > upper,  value if lower <= value <= upper
+   * @return the bonded value
    */
   public static int clamp(int lower, int value, int upper) {
       return Math.max(lower, Math.min(value, upper));
   }
   
   /**
-   * Function that clamps a value between a lower and upper bounds 
+   * Function that clamps a DOUBLE value between a lower and upper bounds 
    *
-   * @param lower Lower bound
-   * @param value Value to compare
-   * @param upper Upper bound
+   * @param lower - Lower bound
+   * @param value - Value to compare
+   * @param upper - Upper bound
    *
-   * @return Lower if value < lower,   Upper if value > upper,  value if lower <= value <= upper
+   * @return the bonded value
    */
   public static double clamp(double lower, double value, double upper) {
       return Math.max(lower, Math.min(value, upper));
