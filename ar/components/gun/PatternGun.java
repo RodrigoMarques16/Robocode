@@ -32,7 +32,11 @@ import ar.ARUtils;
  *
  * Now we have the index so we iterate back as many positions as it
  * would take for the bullet to hit the target to get the next firing angle.
- *
+ */
+
+/**
+ * Symbollic Pattern Matching Gun
+ * Aim based on history of enemy direction changes
  * @author Rodrigo Marques
  */
 public class PatternGun extends Component{
