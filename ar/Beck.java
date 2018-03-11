@@ -46,7 +46,7 @@ public class Beck extends AdvancedRobot {
   private static WideLock radar;
   private static RandomMovement movement;
   
-//-- Run ------------------------------------------------------------------------------------------------------
+//-- Run ----------------------------------------------------------------------
 
   /**
    * Override of AdvancedRobot's run()
@@ -73,7 +73,7 @@ public class Beck extends AdvancedRobot {
 
   }
 
-//-- Private Methods ------------------------------------------------------------------------------------------
+//-- Private Methods ----------------------------------------------------------
 
   /**
    * Paint the robot
@@ -134,7 +134,7 @@ public class Beck extends AdvancedRobot {
     }
   }
   
-//-- Event Handling -------------------------------------------------------------------------------------------
+//-- Event Handling -----------------------------------------------------------
 
   /**
    * Replicate events to components
@@ -143,12 +143,12 @@ public class Beck extends AdvancedRobot {
    * @param e Event to pass on
    */
   private void replicate(String name, Event e) {
-    // should have used lookup tables instead, since not every component implements every event
+    // should have used lookup tables instead, 
+    // since not every component implements every event
     for (Component cmp : _components) {
       try {
         Method m = cmp.getClass().getMethod(name, e.getClass());
         m.invoke(cmp, e);
-        //System.out.println(name + " replicated to " + cmp.getClass().getName());
       }catch (NoSuchMethodException ex) {
         /* component didn't implement this method */
       }catch (Exception ex) {
