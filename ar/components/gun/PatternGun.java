@@ -180,7 +180,6 @@ public class PatternGun extends Component{
    *
    * @param e Scanned robot
    */
-
   public void onScannedRobot(ScannedRobotEvent e) {
     setTarget(e);
 
@@ -195,7 +194,6 @@ public class PatternGun extends Component{
    *
    * @param e Not used
    */
-
   public void onBulletHit(BulletHitEvent e) {
     hits++;
     accuracy = (double) hits / shots;
