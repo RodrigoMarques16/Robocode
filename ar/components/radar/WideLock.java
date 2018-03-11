@@ -27,7 +27,7 @@ public class WideLock extends Component{
       this.robot = robot;
   }
 
-//-- Core ----------------------------------------------------------------------------------------------------
+//-- Core ----------------------------------------------------------------------
 
   /**
    * Called by parent Robot every tick
@@ -36,10 +36,14 @@ public class WideLock extends Component{
     double radarTurn, radarDirection;
 
     if(robot.getTime() == lastScanTime && target != null) {
-       // Target locked
-      double absoluteBearing = robot.getHeadingRadians() + target.getBearingRadians();
-
-      radarTurn = Utils.normalRelativeAngle( absoluteBearing - robot.getRadarHeadingRadians() );
+      // Target locked
+      double myHeading = robot.getHeadingRadians();
+      double myRadarHeading = robot.getRadarHeadingRadians();
+      double targetBearing = target.getBearingRadians();
+      double absoluteBearing = myHeading + targetBearing;
+      
+      
+      radarTurn = Utils.normalRelativeAngle(absoluteBearing - myRadarHeading);
       radarDirection = Math.signum(radarTurn);
 
       radarTurn += radarDirection * (MAX_RADAR_TURN/2);
@@ -59,7 +63,7 @@ public class WideLock extends Component{
     this.target = null;
   }
 
-//-- Event Handling ------------------------------------------------------------------------------------------
+//-- Event Handling -----------------------------------------------------------------------
 
   /**
    * Update target and record scan time
