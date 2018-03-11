@@ -13,8 +13,9 @@ import ar.components.Component;
  * @author Afonso Brandão
  */
 public class RandomMovement extends Component {
-  static final double MAX_VELOCITY = 8;
-  static final double WALL_MARGIN  = 25;
+  static final double MAX_VELOCITY    = 8;
+  static final double WALL_MARGIN     = 25;
+  static final double chanceToFlatten = 0.05;
 
   RoundRectangle2D.Double field;
 
@@ -23,7 +24,7 @@ public class RandomMovement extends Component {
   Point2D enemyLocation;
   double enemyDistance;
   double enemyAbsoluteBearing;
-  double movementLateralAngle = 0.2;
+  double movementLateralAngle;
 
   /**
    * Construtor da Class
@@ -34,35 +35,44 @@ public class RandomMovement extends Component {
   }
 
   /**
-   * Método para para initializar a localização do enimigo e o rectangulo para o cálculo de pontos-destino
+   * Método para para initializar a localização do enimigo e o rectangulo 
+   * para o cálculo de pontos-destino
    */
   public void init() {
     enemyLocation = null;
-    //Vamos projetar um rectangulo que representa o campo do robocode. Vamos dar uma margem de 25 pxx para evitar as paredes
+    //Vamos projetar um rectangulo que representa o campo do robocode.
+    // Vamos dar uma margem de 25 pxx para evitar as paredes
     //precisamos disto para escolher os pontos para os quais no mover
-    field = new RoundRectangle2D.Double(25, 25, bot.getBattleFieldWidth() - 50, bot.getBattleFieldHeight() - 50, 75, 75);
+    field = new RoundRectangle2D.Double( WALL_MARGIN, WALL_MARGIN, 
+                                  bot.getBattleFieldWidth() - 2*WALL_MARGIN, 
+                                  bot.getBattleFieldHeight() - 2*WALL_MARGIN,
+                                  100 - WALL_MARGIN, 100 - WALL_MARGIN);
+    movementLateralAngle = 0.2;
   }
 
   /**
-   *  Comportamento do moviemento quando o robot recebe o evento scannedrobot. Atualiza a posição do inimigo
+   *  Comportamento do moviemento quando o robot recebe o evento scannedrobot.
+   *  Atualiza a posição do inimigo
    *  @param o evento scannedRobot
    */
   public void onScannedRobot(ScannedRobotEvent e) {
     
-    robotLocation = new Point2D.Double(bot.getX(), bot.getY());
+    robotLocation        = new Point2D.Double(bot.getX(), bot.getY());
 
     enemyAbsoluteBearing = bot.getHeadingRadians() + e.getBearingRadians();
-    enemyDistance = e.getDistance();
+    enemyDistance        = e.getDistance();
 
     double xDisplacement = Math.sin(enemyAbsoluteBearing) * enemyDistance;
     double yDisplacement = Math.cos(enemyAbsoluteBearing) * enemyDistance;
     
-    enemyLocation = new Point2D.Double(bot.getX() + xDisplacement, bot.getY() + yDisplacement);
+    enemyLocation        = new Point2D.Double(bot.getX() + xDisplacement, 
+                                              bot.getY() + yDisplacement);
 
   }
 
   /**
-  * Aqui implementamos o behavior do moviemento a cada tick(). Esta função vai ser chamada no run
+  * Aqui implementamos o behavior do moviemento a cada tick(). 
+  * Esta função vai ser chamada no run
   */
   public void execute() {
 
@@ -71,29 +81,36 @@ public class RandomMovement extends Component {
     }
     
     considerChangingDirection();
+
     Point2D robotDestination = null;
-    double tries = 0;
+    double tries             = 0;
 
     do {
       
-      double movementAngle = absoluteBearing(enemyLocation, robotLocation) + movementLateralAngle;
-      double movementLength = enemyDistance * (1.1 - tries / 100.0);
-      double xDisplacement = Math.sin(movementAngle) * movementLength;
-      double yDisplacement = Math.cos(movementAngle) * movementLength;
+      double movementAngle  = absoluteBearing(enemyLocation, robotLocation) 
+                             + movementLateralAngle;
 
-      robotDestination = new Point2D.Double(enemyLocation.getX() + xDisplacement, enemyLocation.getY() + yDisplacement);
+      double movementLength = enemyDistance * (1.1 - tries / 100.0);
+      double xDisplacement  = Math.sin(movementAngle) * movementLength;
+      double yDisplacement  = Math.cos(movementAngle) * movementLength;
+
+      robotDestination = new 
+                Point2D.Double(enemyLocation.getX() + xDisplacement, 
+                               enemyLocation.getY() + yDisplacement);
 
       tries++;
+
     }while (tries < 100 && !field.contains(robotDestination));
 
     goTo(robotDestination);
   }
 
   /**
-   * Método para introduzir aleatoridade no movimento através de uma chance de inverter a direção
+   * Método para introduzir aleatoridade no movimento 
+   * através de uma chance de inverter a direção
    */
   private void considerChangingDirection() {
-    double chanceToFlatten = 0.05;
+    
     if (Math.random() < chanceToFlatten) {
       movementLateralAngle *= -1;
     }
@@ -104,10 +121,17 @@ public class RandomMovement extends Component {
    * @param a posição de destino
    */
   private void goTo(Point2D destination) {
-    double angle = Utils.normalRelativeAngle(absoluteBearing(robotLocation, destination) - bot.getHeadingRadians());
+    double angle = Utils.normalRelativeAngle(
+                  absoluteBearing(robotLocation, destination)
+                  - bot.getHeadingRadians());
+
     double turnAngle = Math.atan(Math.tan(angle));
-    bot.setTurnRightRadians(turnAngle); //Transformar o angulo num valor entre -pi/2 e +pi/2
-    bot.setAhead(robotLocation.distance(destination) * (angle == turnAngle ? 1 : -1));
+
+    //Transformar o angulo num valor entre -pi/2 e +pi/2
+    bot.setTurnRightRadians(turnAngle); 
+
+    bot.setAhead(robotLocation.distance(destination) 
+              * (angle == turnAngle ? 1 : -1));
 
     //Se tivermos de virar muito, limitamos a velocidade a zero
     bot.setMaxVelocity(Math.abs(bot.getTurnRemaining()) > 33 ? 0 : 25);
@@ -119,6 +143,7 @@ public class RandomMovement extends Component {
    * @return o ângulo entre eles
    */
   static double absoluteBearing(Point2D source, Point2D target) {
-      return Math.atan2(target.getX() - source.getX(), target.getY() - source.getY());
+      return Math.atan2(target.getX() - source.getX(), 
+                        target.getY() - source.getY());
   }
 }
