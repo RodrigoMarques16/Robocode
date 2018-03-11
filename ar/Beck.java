@@ -53,7 +53,7 @@ public class Beck extends AdvancedRobot {
    * Initialize the robot's components and execute them every tick
    */
   @Override
-	public void run() {
+  public void run() {
     
     initColors();
     initComponents();
@@ -160,7 +160,6 @@ public class Beck extends AdvancedRobot {
 
   /**
    * Replicate onScannedRobot
-   *
    * @param e ScannedRobotEvent
    */
   @Override
@@ -170,7 +169,6 @@ public class Beck extends AdvancedRobot {
   
   /**
    * Replicate onBulletHit
-   *
    * @param e BulletHitEvent
    */
   @Override
