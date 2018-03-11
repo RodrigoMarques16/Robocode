@@ -9,7 +9,7 @@ import robocode.util.Utils;
 import ar.components.Component;
 import ar.ARUtils;
 
-/**
+/*
  * Beck's Symbolic Pattern Maching Gun, based on Black Widow's. 
  * Bullet power calculation based on Diamond's.
  *
@@ -32,7 +32,11 @@ import ar.ARUtils;
  *
  * Now we have the index so we iterate back as many positions as it
  * would take for the bullet to hit the target to get the next firing angle.
- *
+ */
+ 
+/**
+ * Symbolic Pattern Matching Gun
+ * Use enemy's history of movements to predict firing angle
  * @author Rodrigo Marques
  */
 public class PatternGun extends Component{
