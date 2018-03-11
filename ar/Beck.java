@@ -12,7 +12,7 @@ import ar.components.gun.PatternGun;
 import ar.components.movement.RandomMovement;
 import ar.components.radar.WideLock;
 
-/**
+/*
  * Beck - A robot by Afonso Brandão e Rodrigo Marques
  *  
  *  up201504440 / up201605427
@@ -31,7 +31,10 @@ import ar.components.radar.WideLock;
  *
  *  For the gun, a Symbollic Pattern Matcher looked very interesting
  *  and simple enough for the scope of the project.
- * 
+ */
+
+ /**
+ * Beck - Symbollic Pattern Matching and RandomMovement
  * @author Afonso Brandão e Rodrigo Marques
  * @version 2.0 09/03/2018  
  */
