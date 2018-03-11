@@ -1,10 +1,10 @@
-package ar.Components.Movement;
+package ar.components.movement;
 
 import java.awt.geom.*;     //Point2D.Double e RoundRectangle2D.Double
 import robocode.*;          //API do robocode
 import robocode.util.Utils; //normalRelativeAngle
 import ar.Beck;
-import ar.Components.Component;
+import ar.components.Component;
 
 public class RandomMovement extends Component {
   static final double MAX_VELOCITY = 8;

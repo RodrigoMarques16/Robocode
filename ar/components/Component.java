@@ -1,4 +1,4 @@
-package ar.Components;
+package ar.components;
 
 import robocode.AdvancedRobot;
 

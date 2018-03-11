@@ -1,10 +1,10 @@
-package ar.Components.Radar;
+package ar.components.radar;
 
 import robocode.AdvancedRobot;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
 
-import ar.Components.Component;
+import ar.components.Component;
 
 /**
  * Simple Wide Lock implementation for our robot

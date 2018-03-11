@@ -1,4 +1,4 @@
-package ar.Components.Gun;
+package ar.components.gun;
 
 import robocode.AdvancedRobot;
 import robocode.ScannedRobotEvent;
@@ -6,7 +6,7 @@ import robocode.BulletHitEvent;
 import robocode.Rules;
 import robocode.util.Utils;
 
-import ar.Components.Component;
+import ar.components.Component;
 import ar.ARUtils;
 
 /**

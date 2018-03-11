@@ -37,7 +37,7 @@ import ar.components.radar.WideLock;
  */
 public class Beck extends AdvancedRobot {
 
-  private static List<Component> components = new ArrayList<Component>();
+  private static List<Component> _components = new ArrayList<Component>();
   private static PatternGun gun;
   private static WideLock radar;
   private static RandomMovement movement;
@@ -86,18 +86,18 @@ public class Beck extends AdvancedRobot {
   private void initComponents(){
     if (radar == null) {
       radar = new WideLock(this);
-      components.add(radar);
+      _components.add(radar);
     }
     if (gun == null) {
       gun = new PatternGun(this);
-      components.add(gun);
+      _components.add(gun);
     }
     if (movement == null) {
       movement = new RandomMovement(this);
-      components.add(movement);
+      _components.add(movement);
     }
     
-    for (Component cmp : components) {
+    for (Component cmp : _components) {
       System.out.println(cmp.getClass().getName() + " loaded");
       cmp.init();
     }
@@ -114,7 +114,7 @@ public class Beck extends AdvancedRobot {
    */
   private void replicate(String name, Event e) {
     // should have used lookup tables instead of try/catch
-    for (Component cmp : components) {
+    for (Component cmp : _components) {
       try {
         Method m = cmp.getClass().getMethod(name, e.getClass());
         m.invoke(cmp, e);
