@@ -1,43 +1,26 @@
 package AR.Components;
 
-import robocode.ScannedRobotEvent;
+import robocode.AdvancedRobot;
 
-import AR.Beck;
-
-/*
-  Components are the different controllers for each of the tank's part;
-
-  Objects:
-
-      Beck robot;
-        The paren't robot of this component
-
-
-  Functions:
-  
-      execute()
-        Will be called every tick.
-        
-      init()
-        Called at the begining of each round.
-
-
-  Events:
-    
-      onScannedRobot(ScannedRobotEvent e)
-        The tank's onScannedRobot event will be replicated to the component
-
-*/
-
-
+/**
+ * Components are the different controllers for each part of the tank
+ */
 public abstract class Component {
 
+  /**
+   * Parent robot of this component
+   */
   @SuppressWarnings("unused")
-  private Beck robot;
-
+  private AdvancedRobot robot;
+  
+  /**
+   * Called by parent Robot every tick
+   */
   public abstract void execute();
+  
+  /**
+   * Called by parent Robot at the start of a round
+   */
   public abstract void init();
-
-  public abstract void onScannedRobot(ScannedRobotEvent e);
 
 }
