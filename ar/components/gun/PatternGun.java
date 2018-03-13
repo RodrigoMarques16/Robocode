@@ -41,13 +41,14 @@ import ar.ARUtils;
  */
 public class PatternGun extends Component{
 
-  private static final int            MATCH_LENGTH = 30;
-  private static final double DEFAULT_BULLET_POWER = 1.95D;
-  private static final double  STRONG_BULLET_POWER = 2.95D;
-  private static final double    WEAK_BULLET_POWER = 1.00D;
-  private static final int          CLOSE_QUARTERS = 150;
-  private static final int              LONG_RANGE = 325;
-  private static final int     ACCURACY_THRESHOLD = 0.33;
+  private static final double DEFAULT_BULLET_POWER   = 1.95D;
+  private static final double  STRONG_BULLET_POWER   = 2.95D;
+  private static final double    WEAK_BULLET_POWER   = 1.00D;
+  private static final double     ACCURACY_THRESHOLD = 0.33;
+  private static final int          CLOSE_QUARTERS   = 150;
+  private static final int              LONG_RANGE   = 325;
+  private static final int            MATCH_LENGTH   = 30;
+
 
   private AdvancedRobot robot;
   private ScannedRobotEvent target;
@@ -79,7 +80,7 @@ public class PatternGun extends Component{
   public void execute() {
     if (target != null) {
       double bulletPower = calculateBulletPower();
-      if (canfire(bulletPower)) {
+      if (canFire(bulletPower)) {
 
         fire(bulletPower);
       }
@@ -185,7 +186,7 @@ public class PatternGun extends Component{
    * Determine if the tank can fire
    * @return True if the tank can fire, false if not.
    */
-  private bool canFire(double bulletPower) {
+  private Boolean canFire(double bulletPower) {
     return robot.getGunHeat() == 0 
            && robot.getGunTurnRemaining() == 0
            && robot.getEnergy() > bulletPower;
