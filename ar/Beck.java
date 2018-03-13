@@ -64,9 +64,6 @@ public class Beck extends AdvancedRobot {
     setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
 
     while(true) {
-      for (Component cmp : _components) {
-        cmp.execute();
-      }
       executeComponents();
       execute();
     }
