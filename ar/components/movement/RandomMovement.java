@@ -13,9 +13,11 @@ import ar.components.Component;
  * @author Afonso Brandão
  */
 public class RandomMovement extends Component {
-  static final double MAX_VELOCITY    = 8;
-  static final double WALL_MARGIN     = 25;
-  static final double chanceToFlatten = 0.05;
+  static final double MAX_VELOCITY      = 8;
+  static final double WALL_MARGIN       = 25;
+  static final double CHANCE_TO_FLATTEN = 0.05;
+  static final double INITIAL_MOV_ANGLE = 0.2;
+  static final int NUMBER_OF_TRIES      = 100;
 
   RoundRectangle2D.Double field;
 
@@ -41,7 +43,7 @@ public class RandomMovement extends Component {
   public void init() {
     enemyLocation = null;
     //Vamos projetar um rectangulo que representa o campo do robocode.
-    // Vamos dar uma margem de 25 pxx para evitar as paredes
+    //Vamos dar uma margem de 25 pxx para evitar as paredes
     //precisamos disto para escolher os pontos para os quais no mover
     field = new RoundRectangle2D.Double( 
       WALL_MARGIN, 
@@ -51,11 +53,11 @@ public class RandomMovement extends Component {
       100 - WALL_MARGIN, 100 - WALL_MARGIN
     );
     
-    movementLateralAngle = 0.2;
+    movementLateralAngle = INITIAL_MOV_ANGLE;
   }
 
   /**
-   *  Comportamento do moviemento quando o robot recebe o evento scannedrobot.
+   *  Comportamento do movimento quando o robot recebe o evento scannedrobot.
    *  Atualiza a posição do inimigo
    *  @param o evento scannedRobot
    */
@@ -105,7 +107,7 @@ public class RandomMovement extends Component {
 
       tries++;
 
-    }while (tries < 100 && !field.contains(robotDestination));
+    }while (tries < NUMBER_OF_TRIES && !field.contains(robotDestination));
 
     goTo(robotDestination);
   }
@@ -116,7 +118,7 @@ public class RandomMovement extends Component {
    */
   private void considerChangingDirection() {
     
-    if (Math.random() < chanceToFlatten) {
+    if (Math.random() < CHANCE_TO_FLATTEN) {
       movementLateralAngle *= -1;
     }
   }
